@@ -19,6 +19,6 @@ class GencXmlStandardProviderSpec extends Specification {
 
     def 'test genc provider'() {
         expect:
-        new GencXmlStandardProvider().getStandardEntries().size() == 280
+        new GencXmlStandard().getStandardEntries().size() == 280
     }
 }

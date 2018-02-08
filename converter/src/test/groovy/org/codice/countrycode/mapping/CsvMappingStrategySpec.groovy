@@ -15,7 +15,6 @@ package org.codice.countrycode.mapping
 
 import org.codice.countrycode.standard.CountryCode
 import org.codice.countrycode.standard.Standard
-import org.codice.countrycode.standard.StandardProvider
 import org.codice.countrycode.standard.StandardRegistry
 import spock.lang.Specification
 
@@ -289,7 +288,7 @@ class CsvMappingStrategySpec extends Specification {
     }
 
     def mockStandardProvider(Standard standard, Set entries) {
-        return Mock(StandardProvider) {
+        return Mock(Standard) {
             getStandard() >> standard
             getStandardEntries() >> entries
         }

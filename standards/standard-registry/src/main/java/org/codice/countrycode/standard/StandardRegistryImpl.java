@@ -13,21 +13,19 @@
  */
 package org.codice.countrycode.standard;
 
-import java.util.Collections;
+import java.util.Date;
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-import org.apache.commons.lang3.StringUtils;
-import org.codice.countrycode.standards.fips.FipsJsonStandardProvider;
-import org.codice.countrycode.standards.genc.provider.GencXmlStandardProvider;
+import org.codice.countrycode.standards.fips.FipsJsonStandard;
+import org.codice.countrycode.standards.genc.provider.GencXmlStandard;
 import org.codice.countrycode.standards.iso.Iso3166StandardProvider;
 
 public class StandardRegistryImpl implements StandardRegistry {
 
   private static StandardRegistry standardRegistry;
 
-  private final Set<StandardProvider> standardProviders;
+  private final Set<Standard> standardProviders;
 
   public static StandardRegistry getInstance() {
     if (standardRegistry == null) {
@@ -38,46 +36,51 @@ public class StandardRegistryImpl implements StandardRegistry {
 
   private StandardRegistryImpl() {
     standardProviders = new HashSet<>();
-    standardProviders.add(new FipsJsonStandardProvider());
-    standardProviders.add(new GencXmlStandardProvider());
+    standardProviders.add(new FipsJsonStandard());
+    standardProviders.add(new GencXmlStandard());
     standardProviders.add(new Iso3166StandardProvider());
   }
 
   @Override
-  public Set<StandardProvider> lookup(String name) {
-    if (StringUtils.isEmpty(name)) {
-      return Collections.emptySet();
-    }
-
-    return standardProviders
-        .stream()
-        .filter(provider -> provider.getStandard().getName().equalsIgnoreCase(name))
-        .collect(Collectors.toSet());
+  public StandardInfo lookup(String name) {
+    return null;
   }
 
   @Override
-  public StandardProvider lookup(String name, String version) {
-    if (StringUtils.isEmpty(name) || StringUtils.isEmpty(version)) {
-      return null;
-    }
-
-    Optional<StandardProvider> standardProvider =
-        standardProviders
-            .stream()
-            .filter(
-                provider ->
-                    provider.getStandard().getName().equalsIgnoreCase(name)
-                        && provider.getStandard().getVersion().equalsIgnoreCase(version))
-            .findFirst();
-
-    return standardProvider.orElse(null);
+  public StandardInfo lookup(String name, String version) {
+    return null;
   }
 
   @Override
-  public Set<Standard> getRegisteredStandards() {
+  public StandardInfo lookup(String name, Date publishedDate) {
+    return null;
+  }
+
+  @Override
+  public StandardInfo lookupBefore(String name, Date beforeDate) {
+    return null;
+  }
+
+  @Override
+  public StandardInfo lookupAfter(String name, Date afterDate) {
+    return null;
+  }
+
+  @Override
+  public StandardInfo lookupBetween(String name, Date startDate, Date endDate) {
+    return null;
+  }
+
+  @Override
+  public Standard getByStandard(StandardInfo standardInfo) {
+    return null;
+  }
+
+  @Override
+  public Set<StandardInfo> getRegisteredStandards() {
     return standardProviders
         .stream()
-        .map(StandardProvider::getStandard)
+        .map(Standard::getStandard)
         .collect(Collectors.toSet());
   }
 }

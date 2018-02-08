@@ -11,27 +11,32 @@
  * License is distributed along with this program and can be found at
  * <http://www.gnu.org/licenses/lgpl.html>.
  */
-package org.codice.countrycode.standards.fips;
+package org.codice.countrycode.standards.genc.provider;
 
 import com.google.common.collect.ImmutableSet;
 import java.util.Date;
 import java.util.Set;
-import org.codice.countrycode.standard.Standard;
+import org.codice.countrycode.standard.StandardInfo;
 
-public class FipsStandard implements Standard {
+public class GencStandardInfo implements StandardInfo {
 
   public static final String ALPHA_2 = "alpha2";
 
-  private static final Set<String> SUPPORTED_FORMATS = ImmutableSet.of(ALPHA_2);
+  public static final String ALPHA_3 = "alpha3";
+
+  public static final String NUMERIC = "numeric";
+
+  private static final Set<String> SUPPORTED_FORMATS =
+      ImmutableSet.of(ALPHA_2, ALPHA_3, NUMERIC);
 
   @Override
   public String getName() {
-    return "FIPS";
+    return "GENC";
   }
 
   @Override
   public String getVersion() {
-    return "10-4";
+    return "3.0.0";
   }
 
   @Override

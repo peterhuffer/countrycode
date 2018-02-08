@@ -13,9 +13,9 @@
  */
 package org.codice.countrycode.standards.genc.provider;
 
-import static org.codice.countrycode.standards.genc.provider.GencStandard.ALPHA_2;
-import static org.codice.countrycode.standards.genc.provider.GencStandard.ALPHA_3;
-import static org.codice.countrycode.standards.genc.provider.GencStandard.NUMERIC;
+import static org.codice.countrycode.standards.genc.provider.GencStandardInfo.ALPHA_2;
+import static org.codice.countrycode.standards.genc.provider.GencStandardInfo.ALPHA_3;
+import static org.codice.countrycode.standards.genc.provider.GencStandardInfo.NUMERIC;
 
 import com.google.common.collect.ImmutableSet;
 import java.io.IOException;
@@ -29,7 +29,7 @@ import javax.xml.bind.Unmarshaller;
 import org.apache.commons.io.IOUtils;
 import org.codice.countrycode.standard.CountryCode;
 import org.codice.countrycode.standard.Standard;
-import org.codice.countrycode.standard.StandardProvider;
+import org.codice.countrycode.standard.StandardInfo;
 import org.codice.countrycode.standards.common.CountryCodeBuilder;
 import org.codice.countrycode.standards.genc.GENCStandardBaseline;
 import org.codice.countrycode.standards.genc.GeopoliticalEntityEntry;
@@ -40,26 +40,26 @@ import org.slf4j.LoggerFactory;
  * Reads a local copy of the GENC 3.0.0 standard downloaded from
  * https://nsgreg.nga.mil/doc/view?i=2507
  */
-public class GencXmlStandardProvider implements StandardProvider {
+public class GencXmlStandard implements Standard {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(GencXmlStandardProvider.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(GencXmlStandard.class);
 
   private static final String GENC_CODES_FILE = "GENC Standard Ed3.0.xml";
 
   private static final String CHARSET_NAME = "UTF-8";
 
-  private final Standard standard;
+  private final StandardInfo standard;
 
   private final Set<CountryCode> standardEntries;
 
-  public GencXmlStandardProvider() {
+  public GencXmlStandard() {
     standardEntries = new HashSet<>();
-    standard = new GencStandard();
+    standard = new GencStandardInfo();
     init();
   }
 
   @Override
-  public Standard getStandard() {
+  public StandardInfo getStandard() {
     return standard;
   }
 

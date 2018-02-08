@@ -20,25 +20,25 @@ import org.codice.countrycode.converter.Converter;
 import org.codice.countrycode.converter.MappingStrategy;
 import org.codice.countrycode.mapping.CsvMappingStrategy;
 import org.codice.countrycode.standard.CountryCode;
-import org.codice.countrycode.standard.Standard;
+import org.codice.countrycode.standard.StandardInfo;
 import org.codice.countrycode.standards.common.StandardUtils;
-import org.codice.countrycode.standards.iso.Iso3166Standard;
+import org.codice.countrycode.standards.iso.Iso3166StandardInfo;
 
 public class CountryCodeConverter implements Converter {
 
-  private final Standard defaultStandard;
+  private final StandardInfo defaultStandard;
 
   private MappingStrategy mappingStrategy;
 
   public CountryCodeConverter() {
-    this(new Iso3166Standard());
+    this(new Iso3166StandardInfo());
   }
 
-  public CountryCodeConverter(Standard defaultStandard) {
+  public CountryCodeConverter(StandardInfo defaultStandard) {
     this(defaultStandard, new CsvMappingStrategy());
   }
 
-  public CountryCodeConverter(Standard defaultStandard, MappingStrategy mappingStrategy) {
+  public CountryCodeConverter(StandardInfo defaultStandard, MappingStrategy mappingStrategy) {
     this.defaultStandard = defaultStandard;
     this.mappingStrategy = mappingStrategy;
 
@@ -51,21 +51,21 @@ public class CountryCodeConverter implements Converter {
   }
 
   @Override
-  public Set<CountryCode> fromValue(String formatValue, Standard from, Standard to) {
+  public Set<CountryCode> fromValue(String formatValue, StandardInfo from, StandardInfo to) {
     return fromProperty(formatValue, from, to);
   }
 
   @Override
-  public Set<Standard> getSupportedStandards() {
+  public Set<StandardInfo> getSupportedStandards() {
     return mappingStrategy.getMappedStandards();
   }
 
   @Override
-  public Standard getSystemDefaultStandard() {
+  public StandardInfo getSystemDefaultStandard() {
     return defaultStandard;
   }
 
-  private Set<CountryCode> fromProperty(String propertyValue, Standard from, Standard to) {
+  private Set<CountryCode> fromProperty(String propertyValue, StandardInfo from, StandardInfo to) {
     if (StandardUtils.equalStandards(from, to)) {
       Set<CountryCode> fromCountryCodes =
           mappingStrategy
@@ -89,8 +89,8 @@ public class CountryCodeConverter implements Converter {
             .collect(Collectors.toSet()));
   }
 
-  private boolean mappingStrategyMapsStandard(Standard defaultStandard) {
-    for (Standard standard : mappingStrategy.getMappedStandards()) {
+  private boolean mappingStrategyMapsStandard(StandardInfo defaultStandard) {
+    for (StandardInfo standard : mappingStrategy.getMappedStandards()) {
       if (StandardUtils.equalStandards(standard, defaultStandard)) {
         return true;
       }

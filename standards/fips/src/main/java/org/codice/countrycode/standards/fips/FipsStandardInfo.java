@@ -11,25 +11,36 @@
  * License is distributed along with this program and can be found at
  * <http://www.gnu.org/licenses/lgpl.html>.
  */
-package org.codice.countrycode.standard;
+package org.codice.countrycode.standards.fips;
 
+import com.google.common.collect.ImmutableSet;
+import java.util.Date;
 import java.util.Set;
+import org.codice.countrycode.standard.StandardInfo;
 
-public interface StandardProvider {
+public class FipsStandardInfo implements StandardInfo {
 
-  /**
-   * The {@link Standard} for which the {@code CountryCode}s belong to.
-   *
-   * @return the standard, cannot be null
-   */
-  Standard getStandard();
+  public static final String ALPHA_2 = "alpha2";
 
-  /**
-   * A set of {@code CountryCode}s for this provider's {@code Standard}. The standard returned by
-   * each country code in the set must be equal to this provider's standard.
-   *
-   * @return country codes for this provider's standard, or empty if there are none or there was an
-   *     error reading the source
-   */
-  Set<CountryCode> getStandardEntries();
+  private static final Set<String> SUPPORTED_FORMATS = ImmutableSet.of(ALPHA_2);
+
+  @Override
+  public String getName() {
+    return "FIPS";
+  }
+
+  @Override
+  public String getVersion() {
+    return "10-4";
+  }
+
+  @Override
+  public Date getPublishedDate() {
+    return null;
+  }
+
+  @Override
+  public Set<String> getFormatNames() {
+    return SUPPORTED_FORMATS;
+  }
 }

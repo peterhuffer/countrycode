@@ -15,7 +15,7 @@ package org.codice.countrycode.converter;
 
 import java.util.Set;
 import org.codice.countrycode.standard.CountryCode;
-import org.codice.countrycode.standard.Standard;
+import org.codice.countrycode.standard.StandardInfo;
 
 public interface MappingStrategy {
 
@@ -31,7 +31,7 @@ public interface MappingStrategy {
    *
    * @return a set of standards, or an empty set if none are supported
    */
-  Set<Standard> getMappedStandards();
+  Set<StandardInfo> getMappedStandards();
 
-  Set<CountryCode> getMappingFor(Standard standard, String value);
+  Set<CountryCode> getMappingFor(StandardInfo standard, String value);
 }

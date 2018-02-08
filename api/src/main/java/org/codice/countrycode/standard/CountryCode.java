@@ -18,7 +18,7 @@ public interface CountryCode {
 
   /**
    * Returns the country code in a specific format. Supported format names for this entry are
-   * defined by this entry's {@link Standard#getFormatNames()}.
+   * defined by this entry's {@link StandardInfo#getFormatNames()}.
    *
    * @param formatName name of format to get this entry in
    * @return the format, or null if not a supported format
@@ -41,5 +41,5 @@ public interface CountryCode {
    *
    * @return the standard, cannot return null
    */
-  Standard getStandard();
+  StandardInfo getStandard();
 }

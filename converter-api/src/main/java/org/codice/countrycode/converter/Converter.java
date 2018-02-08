@@ -15,7 +15,7 @@ package org.codice.countrycode.converter;
 
 import java.util.Set;
 import org.codice.countrycode.standard.CountryCode;
-import org.codice.countrycode.standard.Standard;
+import org.codice.countrycode.standard.StandardInfo;
 
 public interface Converter {
 
@@ -28,9 +28,9 @@ public interface Converter {
    * @param to the standard to map to
    * @return a set of country code conversions
    */
-  Set<CountryCode> fromValue(String formatValue, Standard from, Standard to);
+  Set<CountryCode> fromValue(String formatValue, StandardInfo from, StandardInfo to);
 
-  Set<Standard> getSupportedStandards();
+  Set<StandardInfo> getSupportedStandards();
 
-  Standard getSystemDefaultStandard();
+  StandardInfo getSystemDefaultStandard();
 }

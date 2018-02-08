@@ -13,44 +13,23 @@
  */
 package org.codice.countrycode.standard;
 
-import java.util.Date;
 import java.util.Set;
 
-/**
- * A country code standard. The name and version of this standard should be unique from all other
- * standards.
- */
 public interface Standard {
 
   /**
-   * Returns the name of this standard.
+   * The {@link StandardInfo} for which the {@code CountryCode}s belong to.
    *
-   * @return the standard's name, cannot be null or empty string
+   * @return the standard, cannot be null
    */
-  String getName();
+  StandardInfo getStandard();
 
   /**
-   * The version of this country code standard.
+   * A set of {@code CountryCode}s for this provider's {@code StandardInfo}. The standard returned by
+   * each country code in the set must be equal to this provider's standard.
    *
-   * @return the version, or null if a version is not applicable
+   * @return country codes for this provider's standard, or empty if there are none or there was an
+   *     error reading the source
    */
-  String getVersion();
-
-  /**
-   * Returns the date for when this standard was published. If a modification occurs to a standard, such as
-   * the codes it returns or a code being modified, then the published date should reflect the date that change
-   * occurred.
-   *
-   * @return the publication date
-   */
-  Date getPublishedDate();
-
-  /**
-   * Returns a list of formats available for this standard. For example, a standard that supports
-   * alpha 2 country codes, like ISO 3166-1, may have a format of "alpha2". Other examples include
-   * "numeric", "alpha3", etc.
-   *
-   * @return a set of standard formats
-   */
-  Set<String> getFormatNames();
+  Set<CountryCode> getStandardEntries();
 }

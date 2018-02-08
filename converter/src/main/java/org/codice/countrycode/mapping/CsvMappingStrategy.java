@@ -14,7 +14,6 @@
 package org.codice.countrycode.mapping;
 
 import com.google.common.collect.ImmutableSet;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,7 +30,7 @@ import org.apache.commons.lang3.Validate;
 import org.codice.countrycode.converter.MappingStrategy;
 import org.codice.countrycode.standard.CountryCode;
 import org.codice.countrycode.standard.Standard;
-import org.codice.countrycode.standard.StandardProvider;
+import org.codice.countrycode.standard.StandardInfo;
 import org.codice.countrycode.standard.StandardRegistry;
 import org.codice.countrycode.standard.StandardRegistryImpl;
 import org.codice.countrycode.standards.common.StandardUtils;
@@ -86,14 +85,12 @@ public class CsvMappingStrategy implements MappingStrategy {
     if (!parseConfigStandardsAndMappingProperties(
         lines.subList(CSV_STANDARD_LINE_START, CSV_STANDARD_LINE_END))) {
       LOGGER.debug("Failed to parse standards from [{}].", file);
-      throw new IllegalStateException(
-          String.format("Failed to parse standards from [%s].", file));
+      throw new IllegalStateException(String.format("Failed to parse standards from [%s].", file));
     }
 
     if (!parseMappings(lines.subList(CSV_MAPPINGS_LINE_START, lines.size()))) {
       LOGGER.debug("Failed to parse mappings from [{}].", file);
-      throw new IllegalStateException(
-          String.format("Failed to parse mappings from [%s].", file));
+      throw new IllegalStateException(String.format("Failed to parse mappings from [%s].", file));
     }
   }
 
@@ -103,7 +100,7 @@ public class CsvMappingStrategy implements MappingStrategy {
   }
 
   @Override
-  public Set<Standard> getMappedStandards() {
+  public Set<StandardInfo> getMappedStandards() {
     return ImmutableSet.copyOf(
         configStandardPropertyPairs
             .stream()
@@ -112,7 +109,7 @@ public class CsvMappingStrategy implements MappingStrategy {
   }
 
   @Override
-  public Set<CountryCode> getMappingFor(final Standard standard, final String value) {
+  public Set<CountryCode> getMappingFor(final StandardInfo standard, final String value) {
     Optional<StandardPropertyPair> pairOptional =
         configStandardPropertyPairs
             .stream()
@@ -121,7 +118,7 @@ public class CsvMappingStrategy implements MappingStrategy {
 
     if (!pairOptional.isPresent()) {
       LOGGER.debug(
-          "Standard [{} {}] not found in standards provided mapping configuration [{}].",
+          "StandardInfo [{} {}] not found in standards provided mapping configuration [{}].",
           standard.getName(),
           standard.getVersion(),
           fileName);
@@ -129,7 +126,7 @@ public class CsvMappingStrategy implements MappingStrategy {
     }
 
     final StandardPropertyPair standardPropertyPair = pairOptional.get();
-    final Standard configStandard = standardPropertyPair.getStandard();
+    final StandardInfo configStandard = standardPropertyPair.getStandard();
     final String configFormat = standardPropertyPair.getMappingProperty();
 
     for (Set<CountryCode> mapping : countryCodeMappings) {
@@ -185,7 +182,7 @@ public class CsvMappingStrategy implements MappingStrategy {
 
       Set<CountryCode> currentMapping = new HashSet<>();
       for (int i = 0; i < propertyValues.length; i++) {
-        Standard propertyStandard = configStandardPropertyPairs.get(i).getStandard();
+        StandardInfo propertyStandard = configStandardPropertyPairs.get(i).getStandard();
         Optional<StandardPropertyPair> definitionOptional =
             configStandardPropertyPairs
                 .stream()
@@ -207,7 +204,7 @@ public class CsvMappingStrategy implements MappingStrategy {
           break;
         }
 
-        StandardProvider mappingProvider =
+        StandardInfo mappingProvider =
             standardRegistry.lookup(propertyStandard.getName(), propertyStandard.getVersion());
         if (mappingProvider == null) {
           LOGGER.error("Unable to find standard for property value [{}].", propertyValue);
@@ -215,12 +212,13 @@ public class CsvMappingStrategy implements MappingStrategy {
           break;
         }
 
-        Set<CountryCode> providerCodes = mappingProvider.getStandardEntries();
+        Set<CountryCode> providerCodes =
+            standardRegistry.getByStandard(mappingProvider).getStandardEntries();
         StandardPropertyPair definition = definitionOptional.get();
         Optional<CountryCode> code = getCountryCodeFor(propertyValue, definition, providerCodes);
         if (!code.isPresent()) {
           LOGGER.error(
-              "Standard [{} {}] did not have a code with a [{}] mapping property of value [{}].",
+              "StandardInfo [{} {}] did not have a code with a [{}] mapping property of value [{}].",
               propertyStandard.getName(),
               propertyStandard.getVersion(),
               definition.getMappingProperty(),
@@ -248,7 +246,7 @@ public class CsvMappingStrategy implements MappingStrategy {
           "CSV configuration file must have at least 2 mapped standards.");
     }
 
-    List<Standard> definedConfigStandards = new ArrayList<>();
+    List<StandardInfo> definedConfigStandards = new ArrayList<>();
     for (String standard : configStandards) {
       String[] standardParts = standard.split(":");
       if (standardParts.length <= 1) {
@@ -262,10 +260,11 @@ public class CsvMappingStrategy implements MappingStrategy {
       String standardName = standardParts[0].trim();
       String standardVersion = standardParts[1].trim();
 
-      StandardProvider standardProvider = standardRegistry.lookup(standardName, standardVersion);
+      Standard standardProvider =
+          standardRegistry.getByStandard(standardRegistry.lookup(standardName, standardVersion));
       if (standardProvider == null) {
         LOGGER.error(
-            "Standard [{} {}] is not a supported standard.", standardName, standardVersion);
+            "StandardInfo [{} {}] is not a supported standard.", standardName, standardVersion);
         success = false;
         continue;
       }
@@ -287,7 +286,7 @@ public class CsvMappingStrategy implements MappingStrategy {
 
     for (int i = 0; i < mappingProperties.length; i++) {
       String mappingProperty = mappingProperties[i].trim();
-      Standard defStandard = definedConfigStandards.get(i);
+      StandardInfo defStandard = definedConfigStandards.get(i);
 
       if (defStandard.getFormatNames().contains(mappingProperty)) {
         configStandardPropertyPairs.add(new StandardPropertyPair(defStandard, mappingProperty));
@@ -322,7 +321,8 @@ public class CsvMappingStrategy implements MappingStrategy {
 
     } catch (IOException e) {
       LOGGER.debug("Error parsing CSV configuration file [{}].", fileName, e);
-      throw new IllegalStateException(String.format("Error parsing CSV configuration file [%s]", fileName));
+      throw new IllegalStateException(
+          String.format("Error parsing CSV configuration file [%s]", fileName));
     }
 
     if (fileLines.isEmpty()) {
@@ -334,17 +334,17 @@ public class CsvMappingStrategy implements MappingStrategy {
   }
 
   private class StandardPropertyPair {
-    private final Standard standard;
+    private final StandardInfo standardInfo;
 
     private final String mappingProperty;
 
-    StandardPropertyPair(Standard standard, String mappingProperty) {
-      this.standard = standard;
+    StandardPropertyPair(StandardInfo standardInfo, String mappingProperty) {
+      this.standardInfo = standardInfo;
       this.mappingProperty = mappingProperty;
     }
 
-    Standard getStandard() {
-      return standard;
+    StandardInfo getStandard() {
+      return standardInfo;
     }
 
     String getMappingProperty() {

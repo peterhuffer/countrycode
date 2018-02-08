@@ -14,19 +14,19 @@
 package org.codice.countrycode.standards.common;
 
 import org.codice.countrycode.standard.CountryCode;
-import org.codice.countrycode.standard.Standard;
+import org.codice.countrycode.standard.StandardInfo;
 
 public class StandardUtils {
 
   private StandardUtils() {}
 
-  public static boolean hasStandard(CountryCode countryCode, Standard standard) {
-    Standard countryCodeStandard = countryCode.getStandard();
+  public static boolean hasStandard(CountryCode countryCode, StandardInfo standard) {
+    StandardInfo countryCodeStandard = countryCode.getStandard();
     return countryCodeStandard.getName().equals(standard.getName())
         && countryCodeStandard.getVersion().equals(standard.getVersion());
   }
 
-  public static boolean equalStandards(Standard first, Standard second) {
+  public static boolean equalStandards(StandardInfo first, StandardInfo second) {
     return first.getName().equalsIgnoreCase(second.getName())
         && first.getVersion().equalsIgnoreCase(second.getVersion());
   }

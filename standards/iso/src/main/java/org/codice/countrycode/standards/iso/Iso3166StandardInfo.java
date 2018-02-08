@@ -11,14 +11,14 @@
  * License is distributed along with this program and can be found at
  * <http://www.gnu.org/licenses/lgpl.html>.
  */
-package org.codice.countrycode.standards.genc.provider;
+package org.codice.countrycode.standards.iso;
 
 import com.google.common.collect.ImmutableSet;
 import java.util.Date;
 import java.util.Set;
-import org.codice.countrycode.standard.Standard;
+import org.codice.countrycode.standard.StandardInfo;
 
-public class GencStandard implements Standard {
+public class Iso3166StandardInfo implements StandardInfo {
 
   public static final String ALPHA_2 = "alpha2";
 
@@ -26,17 +26,16 @@ public class GencStandard implements Standard {
 
   public static final String NUMERIC = "numeric";
 
-  private static final Set<String> SUPPORTED_FORMATS =
-      ImmutableSet.of(ALPHA_2, ALPHA_3, NUMERIC);
+  private static final Set<String> FORMAT_NAMES = ImmutableSet.of(ALPHA_2, ALPHA_3, NUMERIC);
 
   @Override
   public String getName() {
-    return "GENC";
+    return "ISO3166";
   }
 
   @Override
   public String getVersion() {
-    return "3.0.0";
+    return "1";
   }
 
   @Override
@@ -46,6 +45,6 @@ public class GencStandard implements Standard {
 
   @Override
   public Set<String> getFormatNames() {
-    return SUPPORTED_FORMATS;
+    return FORMAT_NAMES;
   }
 }

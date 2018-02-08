@@ -18,11 +18,11 @@ import java.util.HashMap;
 import java.util.Map;
 import org.apache.commons.lang3.Validate;
 import org.codice.countrycode.standard.CountryCode;
-import org.codice.countrycode.standard.Standard;
+import org.codice.countrycode.standard.StandardInfo;
 
 public class CountryCodeBuilder {
 
-  private final Standard standard;
+  private final StandardInfo standard;
 
   private final String name;
 
@@ -31,10 +31,10 @@ public class CountryCodeBuilder {
   /**
    * Builder for immutable {@link CountryCode}s.
    *
-   * @param standard {@link Standard} of the country code, cannot be null
+   * @param standard {@link StandardInfo} of the country code, cannot be null
    * @param name name of country identified by this country code, cannot be null or empty
    */
-  public CountryCodeBuilder(Standard standard, String name) {
+  public CountryCodeBuilder(StandardInfo standard, String name) {
     Validate.notNull(standard, "Country code standard may not be null");
     Validate.notEmpty(name, "Country code name may not be null or empty");
     this.standard = standard;
@@ -42,7 +42,7 @@ public class CountryCodeBuilder {
   }
 
   public CountryCodeBuilder formatValue(String key, String value) {
-    if(standard.getFormatNames().contains(key)) {
+    if (standard.getFormatNames().contains(key)) {
       formatValues.put(key, value);
     }
     return this;
@@ -59,13 +59,13 @@ public class CountryCodeBuilder {
 
   private class CountryCodeImpl implements CountryCode {
 
-    private final Standard standard;
+    private final StandardInfo standard;
 
     private final Map<String, String> formatValues;
 
     private final String name;
 
-    CountryCodeImpl(Standard standard, String name, Map<String, String> formatValues) {
+    CountryCodeImpl(StandardInfo standard, String name, Map<String, String> formatValues) {
       this.standard = standard;
       this.name = name;
       this.formatValues = formatValues;
@@ -82,7 +82,7 @@ public class CountryCodeBuilder {
     }
 
     @Override
-    public Standard getStandard() {
+    public StandardInfo getStandard() {
       return standard;
     }
 
