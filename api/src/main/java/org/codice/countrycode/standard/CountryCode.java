@@ -22,6 +22,8 @@ public interface CountryCode {
    *
    * @param formatName name of format to get this entry in
    * @return the format, or null if not a supported format
+   * @throws IllegalArgumentException if the {@code formatName} is not supported by this country
+   *     code
    */
   String getAsFormat(String formatName);
 
