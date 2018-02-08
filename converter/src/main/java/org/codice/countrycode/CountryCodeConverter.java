@@ -50,28 +50,9 @@ public class CountryCodeConverter implements Converter {
     }
   }
 
-  private boolean mappingStrategyMapsStandard(Standard defaultStandard) {
-    for (Standard standard : mappingStrategy.getMappedStandards()) {
-      if (StandardUtils.equalStandards(standard, defaultStandard)) {
-        return true;
-      }
-    }
-    return false;
-  }
-
   @Override
-  public Set<CountryCode> fromAlpha2(String alpha2, Standard from, Standard to) {
-    return fromProperty(alpha2, from, to);
-  }
-
-  @Override
-  public Set<CountryCode> fromAlpha3(String alpha3, Standard from, Standard to) {
-    return fromProperty(alpha3, from, to);
-  }
-
-  @Override
-  public Set<CountryCode> fromNumeric(String numeric, Standard from, Standard to) {
-    return fromProperty(numeric, from, to);
+  public Set<CountryCode> fromValue(String formatValue, Standard from, Standard to) {
+    return fromProperty(formatValue, from, to);
   }
 
   @Override
@@ -106,5 +87,14 @@ public class CountryCodeConverter implements Converter {
             .stream()
             .filter(cc -> StandardUtils.hasStandard(cc, to))
             .collect(Collectors.toSet()));
+  }
+
+  private boolean mappingStrategyMapsStandard(Standard defaultStandard) {
+    for (Standard standard : mappingStrategy.getMappedStandards()) {
+      if (StandardUtils.equalStandards(standard, defaultStandard)) {
+        return true;
+      }
+    }
+    return false;
   }
 }

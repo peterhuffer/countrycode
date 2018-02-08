@@ -42,10 +42,10 @@ class CountryCodeConverterSpec extends Specification {
 
     MappingStrategy mappingStrategy
 
-    def 'test from alpha2'() {
-        def standardOne = mockStandard(STANDARD_NAME_1, STANDARD_VERSION_1, ['alpha2'] as Set)
-        def standardTwo = mockStandard(STANDARD_NAME_2, STANDARD_VERSION_2, ['alpha3'] as Set)
-        def standardThree = mockStandard(STANDARD_NAME_3, STANDARD_VERSION_3, ['alpha3'] as Set)
+    def 'test from value'() {
+        def standardOne = mockStandard(STANDARD_NAME_1, STANDARD_VERSION_1, [ALPHA_2] as Set)
+        def standardTwo = mockStandard(STANDARD_NAME_2, STANDARD_VERSION_2, [ALPHA_3] as Set)
+        def standardThree = mockStandard(STANDARD_NAME_3, STANDARD_VERSION_3, [ALPHA_3] as Set)
 
         def cc1 = mockCountryCode(standardOne, [(ALPHA_2): 'AB'])
         def cc2 = mockCountryCode(standardTwo, [(ALPHA_3): 'DEF'])
@@ -61,71 +61,13 @@ class CountryCodeConverterSpec extends Specification {
         converter = new CountryCodeConverter(standardTwo, mappingStrategy)
 
         when:
-        def countryCodes = converter.fromAlpha2('AB', standardOne, standardTwo)
+        def countryCodes = converter.fromValue('AB', standardOne, standardTwo)
 
         then:
         countryCodes.count {
             it.getAsFormat(ALPHA_3) == 'DEF' &&
                     it.getStandard().getName() == STANDARD_NAME_2 &&
                     it.getStandard().getVersion() == STANDARD_VERSION_2
-        } == 1
-    }
-
-    def 'test from alpha3'() {
-        setup:
-        def standardOne = mockStandard(STANDARD_NAME_1, STANDARD_VERSION_1, [ALPHA_3] as Set)
-        def standardTwo = mockStandard(STANDARD_NAME_2, STANDARD_VERSION_2, [ALPHA_3] as Set)
-        def standardThree = mockStandard(STANDARD_NAME_3, STANDARD_VERSION_3, [ALPHA_3] as Set)
-
-        def cc1 = mockCountryCode(standardOne, [(ALPHA_3): 'ABC'])
-        def cc2 = mockCountryCode(standardTwo, [(ALPHA_3): 'DEF'])
-        def cc3 = mockCountryCode(standardThree, [(ALPHA_3): 'GHI'])
-
-        mappingStrategy = Mock(MappingStrategy) {
-            getMappings() >> [[cc1, cc2, cc3] as Set]
-            getMappedStandards() >> [standardOne, standardTwo, standardThree]
-            getMappingFor(_ as Standard, 'ABC') >> [cc1, cc2, cc3]
-        }
-
-        converter = new CountryCodeConverter(standardOne, mappingStrategy)
-
-        when:
-        def countryCodes = converter.fromAlpha3('ABC', standardOne, standardThree)
-
-        then:
-        countryCodes.count {
-            it.getAsFormat(ALPHA_3) == 'GHI' &&
-                    it.getStandard().getName() == STANDARD_NAME_3 &&
-                    it.getStandard().getVersion() == STANDARD_VERSION_3
-        } == 1
-    }
-
-    def 'test from numeric'() {
-        setup:
-        def standardOne = mockStandard(STANDARD_NAME_1, STANDARD_VERSION_1, [NUMERIC] as Set)
-        def standardTwo = mockStandard(STANDARD_NAME_2, STANDARD_VERSION_2, [NUMERIC] as Set)
-        def standardThree = mockStandard(STANDARD_NAME_3, STANDARD_VERSION_3, [NUMERIC] as Set)
-
-        def cc1 = mockCountryCode(standardOne, [(NUMERIC): '001'])
-        def cc2 = mockCountryCode(standardTwo, [(NUMERIC): '002'])
-        def cc3 = mockCountryCode(standardThree, [(NUMERIC): '003'])
-
-        mappingStrategy = Mock(MappingStrategy) {
-            getMappings() >> [[cc1, cc2, cc3] as Set]
-            getMappedStandards() >> [standardOne, standardTwo, standardThree]
-            getMappingFor(_ as Standard, '001') >> [cc1, cc2, cc3]
-        }
-
-        converter = new CountryCodeConverter(standardOne, mappingStrategy)
-
-        when:
-        def countryCodes = converter.fromNumeric('001', standardOne, standardThree)
-
-        then:
-        countryCodes.count {
-            it.getAsFormat(NUMERIC) == '003' &&
-                    it.getStandard().getName() == STANDARD_NAME_3 &&
-                    it.getStandard().getVersion() == STANDARD_VERSION_3
         } == 1
     }
 
@@ -148,7 +90,7 @@ class CountryCodeConverterSpec extends Specification {
         converter = new CountryCodeConverter(standardOne, mappingStrategy)
 
         when:
-        def countryCodes = converter.fromAlpha3('NOTEXIST', standardOne, standardOne)
+        def countryCodes = converter.fromValue('NOTEXIST', standardOne, standardOne)
 
         then:
         countryCodes.size() == 0
@@ -173,7 +115,7 @@ class CountryCodeConverterSpec extends Specification {
         converter = new CountryCodeConverter(standardOne, mappingStrategy)
 
         when:
-        def countryCodes = converter.fromAlpha3('ABC', standardOne, standardOne)
+        def countryCodes = converter.fromValue('ABC', standardOne, standardOne)
 
         then:
         countryCodes.count {
