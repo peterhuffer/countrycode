@@ -13,6 +13,7 @@
  */
 package org.codice.countrycode.standard;
 
+import java.util.Date;
 import java.util.Set;
 
 /**
@@ -34,6 +35,15 @@ public interface Standard {
    * @return the version, or null if a version is not applicable
    */
   String getVersion();
+
+  /**
+   * Returns the date for when this standard was published. If a modification occurs to a standard, such as
+   * the codes it returns or a code being modified, then the published date should reflect the date that change
+   * occurred.
+   *
+   * @return the publication date
+   */
+  Date getPublishedDate();
 
   /**
    * Returns a list of formats available for this standard. For example, a standard that supports

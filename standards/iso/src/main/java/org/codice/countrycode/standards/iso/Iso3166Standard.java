@@ -14,6 +14,7 @@
 package org.codice.countrycode.standards.iso;
 
 import com.google.common.collect.ImmutableSet;
+import java.util.Date;
 import java.util.Set;
 import org.codice.countrycode.standard.Standard;
 
@@ -35,6 +36,11 @@ public class Iso3166Standard implements Standard {
   @Override
   public String getVersion() {
     return "1";
+  }
+
+  @Override
+  public Date getPublishedDate() {
+    return null;
   }
 
   @Override

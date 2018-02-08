@@ -14,6 +14,7 @@
 package org.codice.countrycode.standards.genc.provider;
 
 import com.google.common.collect.ImmutableSet;
+import java.util.Date;
 import java.util.Set;
 import org.codice.countrycode.standard.Standard;
 
@@ -36,6 +37,11 @@ public class GencStandard implements Standard {
   @Override
   public String getVersion() {
     return "3.0.0";
+  }
+
+  @Override
+  public Date getPublishedDate() {
+    return null;
   }
 
   @Override

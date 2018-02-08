@@ -14,6 +14,7 @@
 package org.codice.countrycode.standards.fips;
 
 import com.google.common.collect.ImmutableSet;
+import java.util.Date;
 import java.util.Set;
 import org.codice.countrycode.standard.Standard;
 
@@ -31,6 +32,11 @@ public class FipsStandard implements Standard {
   @Override
   public String getVersion() {
     return "10-4";
+  }
+
+  @Override
+  public Date getPublishedDate() {
+    return null;
   }
 
   @Override
