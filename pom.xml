@@ -389,9 +389,7 @@
     </distributionManagement>
 
     <modules>
-        <module>api</module>
-        <module>converter</module>
         <module>standards</module>
-        <module>converter-api</module>
+        <module>converter</module>
     </modules>
 </project>
